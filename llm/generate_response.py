@@ -174,18 +174,10 @@ _EDUCATION_KEYWORDS = {
     "required education", "required degree", "educational requirement",
 }
 
-_CANADA_QUERY_TERMS = ("canada", "canadian", "noc")
-
-
 def _detect_education_intent(question: str) -> bool:
     """Return True when the question is asking about education/qualifications."""
     q = question.lower()
     return any(kw in q for kw in _EDUCATION_KEYWORDS)
-
-
-def _detect_canada_intent(question: str) -> bool:
-    q = question.lower()
-    return any(term in q for term in _CANADA_QUERY_TERMS)
 
 
 def _extract_occupation_from_query(question: str, chunks: list[dict]) -> str:
@@ -260,7 +252,6 @@ def _looks_weak_answer(text: str, question: str = "") -> bool:
 
 def _fallback_answer(question: str, chunks: list[dict]) -> str:
     q = question.lower()
-    asks_canada = _detect_canada_intent(question)
     asks_knowledge = any(word in q for word in ("knowledge", "subject", "subjects", "study"))
     if asks_knowledge:
         best = next((
@@ -272,7 +263,6 @@ def _fallback_answer(question: str, chunks: list[dict]) -> str:
         best = next((c for c in chunks if _clean(c.get("source", "")).upper() == "ONET"), None)
     if best is None and chunks:
         best = chunks[0]
-    canada_chunk = next((c for c in chunks if _clean(c.get("source", "")).upper() == "CANADA"), None)
 
     if best:
         title = _clean(best.get("title", ""))
@@ -325,19 +315,6 @@ def _fallback_answer(question: str, chunks: list[dict]) -> str:
             if styles:
                 lines.append(f"Helpful work styles include: {_join_items(styles)}.")
 
-        if asks_canada and canada_chunk:
-            canada_title = _clean(canada_chunk.get("title", ""))
-            canada_content = _clean(canada_chunk.get("content", ""))
-            canada_desc = _short_text(_extract_field(canada_content, "Description") or canada_content, limit=220)
-            canada_category = _extract_field(canada_content, "Category")
-            if canada_desc:
-                canada_line = f"Canada dataset match: {canada_title}: {canada_desc}"
-                if canada_category:
-                    canada_line += f" (Category: {canada_category})."
-                else:
-                    canada_line += "."
-                lines.append(canada_line)
-
         # Strict intent mode: only answer exactly what was asked.
         if asks_skills and not asks_knowledge and not asks_duties and not asks_overview:
             lines = [l for l in lines if l.lower().startswith("important skills include") or l.lower().startswith("useful abilities include")]
@@ -349,7 +326,6 @@ def _fallback_answer(question: str, chunks: list[dict]) -> str:
                 if l.lower().startswith("main purpose")
                 or l.lower().startswith("typical responsibilities include")
                 or l.lower().startswith("common work activities include")
-                or l.lower().startswith("canada dataset match")
             ]
 
         if lines:

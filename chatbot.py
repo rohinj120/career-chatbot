@@ -20,7 +20,6 @@ logger = logging.getLogger(__name__)
 from llm.generate_response import generate_response, build_related_occupations_response
 from retrievers.esco_retriever import search_esco
 from retrievers.onet_retriever import get_onet_by_title, get_related_occupations_by_title, search_onet
-from retrievers.canada_retriever import search_canada
 from router.query_router import route_query
 
 # Synonym map: normalised user phrase → exact O*NET occupation title
@@ -73,17 +72,11 @@ _RELATED_OCC_PATTERNS = [
 ]
 
 _CONFIDENCE_THRESHOLD = 0.45  # minimum token-overlap to trust a metadata match
-_CANADA_QUERY_TERMS = ("canada", "canadian", "noc")
 
 
 def _detect_related_occupations_intent(query: str) -> bool:
     q = query.lower().strip()
     return any(p in q for p in _RELATED_INTENT_PHRASES)
-
-
-def _query_targets_canada(query: str) -> bool:
-    lowered = query.lower()
-    return any(term in lowered for term in _CANADA_QUERY_TERMS)
 
 
 def _extract_related_occ_target(query: str) -> str:
@@ -188,8 +181,6 @@ def _pick_best_role_match(role: str, candidates: list[dict]) -> list[dict]:
 
 
 def run_pipeline(query: str) -> str:
-    wants_canada = _query_targets_canada(query)
-
     if _detect_related_occupations_intent(query):
         answer = _handle_related_occupations(query)
         if answer:
@@ -198,12 +189,12 @@ def run_pipeline(query: str) -> str:
     role = _extract_role_from_query(query)
     if role:
         direct = get_onet_by_title(_role_title_variants(role))
-        if direct and not wants_canada:
+        if direct:
             return generate_response(query, direct)
         # Role intent fallback: keep retrieval occupation-focused (ONET only).
         role_candidates = search_onet(role, top_k=1)
         best_role = _pick_best_role_match(role, role_candidates)
-        if best_role and not wants_canada:
+        if best_role:
             return generate_response(query, best_role)
 
     selected_sources, scores, query_embedding = route_query(query)
@@ -216,7 +207,6 @@ def run_pipeline(query: str) -> str:
     source_handlers = {
         "ESCO": search_esco,
         "ONET": search_onet,
-        "CANADA": search_canada,
     }
     for source_name in selected_sources:
         handler = source_handlers.get(source_name)
@@ -235,7 +225,7 @@ def run_pipeline(query: str) -> str:
         seen_titles.add(title)
         unique.append(r)
 
-    if role and unique and not wants_canada:
+    if role and unique:
         exact = [r for r in unique if (r.get("title", "").strip().lower() == role.lower())]
         if exact:
             unique = exact

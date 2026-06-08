@@ -42,10 +42,6 @@ INDEX_REGISTRY: dict[str, tuple[str, str]] = {
         str(PROJECT_ROOT / "metadata" / "onet" / "metadata.pkl"),
     ),
     # Canada NOC occupational dataset
-    "CANADA": (
-        str(PROJECT_ROOT / "vector_db" / "descriptors_index.faiss"),
-        str(PROJECT_ROOT / "embeddings" / "descriptors_metadata.pkl"),
-    ),
 }
 
 # ── Routing thresholds (tune these without touching any other code) ────────────
@@ -55,9 +51,6 @@ CLOSE_SCORE_THRESHOLD: float = 0.15
 
 # Warn the user when the best match scores below this — results may be off-topic.
 MIN_CONFIDENCE: float = 0.20
-
-CANADA_QUERY_TERMS = ("canada", "canadian", "noc")
-CANADA_HINT_THRESHOLD: float = 0.45
 
 # ── Lazy-loaded FAISS indexes ──────────────────────────────────────────────────
 _loaded_indexes: dict[str, faiss.Index] = {}
@@ -79,11 +72,6 @@ def _load_indexes() -> dict[str, faiss.Index]:
 def _l2_to_similarity(distance: float) -> float:
     # IndexFlatIP with normalized vectors returns cosine similarity directly [0, 1]
     return float(distance)
-
-
-def _targets_canada(query: str) -> bool:
-    lowered = query.lower()
-    return any(term in lowered for term in CANADA_QUERY_TERMS)
 
 
 # ── Public API ─────────────────────────────────────────────────────────────────
@@ -157,20 +145,6 @@ def route_query(
                 "Excluded source %s  (gap=%.4f > threshold=%.2f)",
                 name, gap, CLOSE_SCORE_THRESHOLD,
             )
-
-    # Canada geography hint: force-add CANADA even if gap is large when query targets it.
-    canada_score = scores.get("CANADA")
-    if (
-        canada_score is not None
-        and "CANADA" not in selected
-        and _targets_canada(query)
-        and canada_score >= CANADA_HINT_THRESHOLD
-    ):
-        selected.append("CANADA")
-        logger.info(
-            "Added CANADA source due to query geography hint (score=%.4f >= %.2f)",
-            canada_score, CANADA_HINT_THRESHOLD,
-        )
 
     logger.info("Final selected sources: %s", selected)
     return selected, scores, query_embedding
