@@ -1,0 +1,10 @@
+table,rows,duplicates,dirty_values,cleanliness_pct,status
+occupation_data,1016,0,0,100.0,CLEAN
+skills,62580,0,0,100.0,CLEAN
+abilities,92976,0,0,100.0,CLEAN
+knowledge,59004,0,0,100.0,CLEAN
+task_statements,18796,0,0,100.0,CLEAN
+work_activities,73308,0,0,100.0,CLEAN
+technology_skills,32773,0,258,99.6,CLEAN
+work_styles,37422,0,0,100.0,CLEAN
+related_occupations,18460,0,0,100.0,CLEAN

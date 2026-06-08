@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Move-Item -Path \"c:\\\\Users\\\\rohin jain\\\\Desktop\\\\career_rag_system\\\\data\\\\embedding\\\\esco\\\\faiss_index.bin\" -Destination \"c:\\\\Users\\\\rohin jain\\\\Desktop\\\\career_rag_system\\\\embeddings\\\\esco\\\\faiss_index.bin\")",
+      "PowerShell(Move-Item -Path \"c:\\\\Users\\\\rohin jain\\\\Desktop\\\\career_rag_system\\\\data\\\\embedding\\\\esco\\\\metadata.pkl\" -Destination \"c:\\\\Users\\\\rohin jain\\\\Desktop\\\\career_rag_system\\\\embeddings\\\\esco\\\\metadata.pkl\")",
+      "PowerShell(Remove-Item -Recurse -Force -Confirm:$false -Path \"c:\\\\Users\\\\rohin jain\\\\Desktop\\\\career_rag_system\\\\data\\\\embedding\")",
+      "Bash(python -c \"import pandas as pd; df = pd.read_csv\\(r'c:\\\\Users\\\\rohin jain\\\\Desktop\\\\career_rag_system\\\\data\\\\onet\\\\jobs_with_skills.csv'\\); print\\(df.columns.tolist\\(\\)\\); print\\(df.head\\(2\\)\\)\")",
+      "Bash(python -c \"import pandas as pd; df = pd.read_csv\\(r'c:\\\\Users\\\\rohin jain\\\\Desktop\\\\career_rag_system\\\\data\\\\onet\\\\onet_job_titles.csv'\\); print\\(df.columns.tolist\\(\\)\\); print\\(df.head\\(2\\)\\)\")",
+      "Bash(python -c \"import pandas as pd; df = pd.read_csv\\(r'c:\\\\Users\\\\rohin jain\\\\Desktop\\\\career_rag_system\\\\data\\\\onet\\\\jobs_with_abilities.csv'\\); print\\(df.columns.tolist\\(\\)\\); print\\(df.head\\(1\\).to_dict\\(\\)\\)\")",
+      "Bash(python -c \"import pandas as pd; df = pd.read_csv\\(r'c:\\\\Users\\\\rohin jain\\\\Desktop\\\\career_rag_system\\\\data\\\\onet\\\\jobs_with_knowledge.csv'\\); print\\(df.columns.tolist\\(\\)\\)\")",
+      "Bash(python -c \"import pandas as pd; df = pd.read_csv\\(r'c:\\\\Users\\\\rohin jain\\\\Desktop\\\\career_rag_system\\\\data\\\\onet\\\\onet_semantic_jobs.csv'\\); print\\(df.columns.tolist\\(\\)\\); print\\(df.head\\(1\\)\\)\")",
+      "Bash(python -c \"import pandas as pd; df = pd.read_csv\\(r'c:\\\\Users\\\\rohin jain\\\\Desktop\\\\career_rag_system\\\\data\\\\onet\\\\onet_semantic_jobs.csv'\\); print\\(len\\(df\\)\\); print\\(df['semantic_text'][0][:300]\\)\")",
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\rohin jain\\\\Desktop\\\\career_rag_system\" -Recurse -Depth 2)",
+      "Bash(Select-Object FullName, Length)",
+      "Bash(python -c \"import chatbot\")",
+      "Bash(python chatbot.py)",
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\rohin jain\\\\Desktop\\\\career_rag_system\" -Recurse -File)",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(Sort-Object)"
+    ]
+  }
+}

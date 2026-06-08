@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c ' *)",
+      "Bash(ls data/onet/)",
+      "Bash(dir data\\\\onet)",
+      "Bash(python -m pytest tests/test_education_intent.py -v)",
+      "Bash(python -c \"import sys; print\\(sys.executable\\)\")",
+      "Bash(conda run *)",
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\rohin jain\\\\Desktop\\\\career_rag_system\" -Recurse -Force)",
+      "Bash(Select-Object FullName)",
+      "Bash(python tests/test_related_occupations.py)",
+      "Bash(Select-Object FullName, PSIsContainer)",
+      "Bash(Sort-Object FullName)",
+      "Bash(powershell -Command \"Get-ChildItem -Filter 'requirements*.txt' -o:FullName; Get-ChildItem -Filter '.env*' -o:FullName; Get-ChildItem -Filter 'setup.py' -o:FullName; Get-ChildItem -Filter 'pyproject.toml' -o:FullName\")",
+      "Bash(find \"/mnt/c/Users/rohin jain/Desktop/career_rag_system\" -name \"*.faiss\" -o -name \"descriptors*\" 2>/dev/null)",
+      "Read(//mnt/c/Users/rohin jain/Desktop/**)",
+      "PowerShell(cd \"c:\\\\Users\\\\rohin jain\\\\Desktop\\\\career_rag_system\"; Start-Process powershell -ArgumentList \"-NoExit\", \"-Command\", \"cd 'c:\\\\Users\\\\rohin jain\\\\Desktop\\\\career_rag_system'; uvicorn api:app --host 127.0.0.1 --port 8000 --reload\" -WindowStyle Normal)",
+      "PowerShell(Start-Sleep -Seconds 3; try { $r = Invoke-WebRequest -Uri \"http://127.0.0.1:8000/\" -TimeoutSec 5; $r.StatusCode } catch { $_.Exception.Message })",
+      "PowerShell(cd \"c:\\\\Users\\\\rohin jain\\\\Desktop\\\\career_rag_system\"; Start-Process powershell -ArgumentList \"-NoExit\", \"-Command\", \"cd 'c:\\\\Users\\\\rohin jain\\\\Desktop\\\\career_rag_system'; uvicorn api:app --host 127.0.0.1 --port 8000\" -WindowStyle Normal)",
+      "PowerShell(Start-Sleep -Seconds 10; try { $r = Invoke-WebRequest -Uri \"http://127.0.0.1:8000/\" -TimeoutSec 10; \"Server running: $\\($r.StatusCode\\)\" } catch { \"Not yet: $\\($_.Exception.Message\\)\" })",
+      "Bash(uvicorn api:app --host 127.0.0.1 --port 8000)",
+      "PowerShell(Start-Sleep -Seconds 12; try { $r = Invoke-WebRequest -Uri \"http://127.0.0.1:8000/\" -UseBasicParsing -TimeoutSec 5; \"Server running: $\\($r.StatusCode\\)\" } catch { \"Failed: $\\($_.Exception.Message\\)\" })"
+    ]
+  }
+}

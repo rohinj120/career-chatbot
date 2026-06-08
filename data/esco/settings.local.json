@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python embeddings/build_embeddings.py)",
+      "Bash(python -c ' *)",
+      "Bash(python embeddings/search_embeddings.py)"
+    ]
+  }
+}

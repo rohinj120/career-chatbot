@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(awk '{print $NF}')",
+      "Bash(python -m py_compile ask.py)",
+      "Bash(python -m py_compile search.py)",
+      "Bash(python -m py_compile intent_detection.py)",
+      "Bash(python ask.py)"
+    ]
+  }
+}
