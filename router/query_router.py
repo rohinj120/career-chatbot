@@ -41,7 +41,10 @@ INDEX_REGISTRY: dict[str, tuple[str, str]] = {
         str(PROJECT_ROOT / "indexes" / "onet" / "faiss_index.bin"),
         str(PROJECT_ROOT / "metadata" / "onet" / "metadata.pkl"),
     ),
-    # Canada NOC occupational dataset
+    "NOC": (
+        str(PROJECT_ROOT / "indexes" / "noc" / "faiss_index.bin"),
+        str(PROJECT_ROOT / "metadata" / "noc" / "metadata.pkl"),
+    ),
 }
 
 # ── Routing thresholds (tune these without touching any other code) ────────────

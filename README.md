@@ -1,6 +1,6 @@
 # Career RAG System
 
-An AI-powered career guidance chatbot using Retrieval-Augmented Generation. Ask natural language questions about careers, skills, education, and occupations — the system retrieves structured data from O\*NET and ESCO, then generates a grounded answer using a local LLM running entirely on your machine.
+An AI-powered career guidance chatbot using Retrieval-Augmented Generation. Ask natural language questions about careers, skills, education, and occupations — the system retrieves structured data from O\*NET, Canada dataset and ESCO, then generates a grounded answer using a local LLM running entirely on your machine.
 
 ---
 
@@ -12,7 +12,8 @@ User
        └─► FastAPI Backend  (/chat-stream)
              └─► Query Router  (FAISS semantic similarity)
                    ├─► O*NET Retriever  (skills, tasks, education, related occupations)
-                   └─► ESCO Retriever   (European competences & occupations)
+                   ├─► ESCO Retriever   (European competences & occupations)
+                   └─► NOC Retriever    (Canadian work descriptors & abilities)
                          └─► LLM  (Phi-3-mini-4k-instruct, runs locally)
                                └─► Streamed response  (word-by-word)
 ```
@@ -27,7 +28,7 @@ User
 | Backend API | FastAPI + Uvicorn |
 | Semantic Router | FAISS + Sentence Transformers |
 | LLM | microsoft/Phi-3-mini-4k-instruct (local, offline) |
-| Datasets | O\*NET (US), ESCO (European) |
+| Datasets | O\*NET (US), ESCO (European), NOC (Canada) |
 | Embeddings | Sentence Transformers |
 | Language | Python 3.10+ / Node.js 18+ |
 
@@ -46,14 +47,15 @@ career_rag_system/
 │
 ├── retrievers/
 │   ├── onet_retriever.py         # O*NET data retrieval
-│   └── esco_retriever.py         # ESCO data retrieval
+│   ├── esco_retriever.py         # ESCO data retrieval
+│   └── noc_retriever.py          # NOC (Canada) descriptors retrieval
 │
 ├── llm/
 │   ├── generate_response.py      # LLM inference + response formatting
 │   └── education_data.py         # Education requirement lookups
 │
 ├── embeddings/                   # Scripts to build FAISS indexes
-├── indexes/                      # FAISS index files (ESCO + O*NET)
+├── indexes/                      # FAISS index files (ESCO + O*NET + NOC)
 ├── metadata/                     # Metadata pickles for index entries
 ├── models/
 │   └── Phi-3-mini-4k-instruct/   # Local model weights (7.64 GB)
@@ -150,7 +152,7 @@ Then open [http://localhost:5173](http://localhost:5173) in your browser.
 ## How It Works
 
 ### Query Routing
-The user's message is embedded using a sentence-transformer model. That embedding is compared against every FAISS index (O\*NET, ESCO) using L2 distance converted to a similarity score. The highest-scoring source is selected — no hardcoded keywords or intent labels. To add a new dataset, add one entry to `INDEX_REGISTRY` in `router/query_router.py`.
+The user's message is embedded using a sentence-transformer model. That embedding is compared against every FAISS index (O\*NET, ESCO, NOC) using cosine similarity. The highest-scoring source is selected — no hardcoded keywords or intent labels. To add a new dataset, add one entry to `INDEX_REGISTRY` in `router/query_router.py`.
 
 ### Retrieval
 Depending on the routed source, the relevant retriever fetches structured career data — job tasks, required skills, education levels, related occupations, and competences.
@@ -169,6 +171,7 @@ FastAPI returns a `StreamingResponse` that yields words with a small delay. The 
 |---|---|---|
 | O\*NET | United States | Skills, tasks, abilities, work styles, education, wages |
 | ESCO | European Union | Occupations, skills, competences, multilingual labels |
+| NOC | Canada | Work descriptors, abilities, cognitive & physical skill categories |
 
 ---
 

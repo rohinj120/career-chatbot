@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 
 from llm.generate_response import generate_response, build_related_occupations_response
 from retrievers.esco_retriever import search_esco
+from retrievers.noc_retriever import search_noc
 from retrievers.onet_retriever import get_onet_by_title, get_related_occupations_by_title, search_onet
 from router.query_router import route_query
 
@@ -180,26 +181,26 @@ def _pick_best_role_match(role: str, candidates: list[dict]) -> list[dict]:
     return [scored[0][1]]
 
 
-def run_pipeline(query: str) -> str:
+def run_pipeline(query: str) -> tuple[str, list[str]]:
     if _detect_related_occupations_intent(query):
         answer = _handle_related_occupations(query)
         if answer:
-            return answer
+            return answer, ["O*NET"]
 
     role = _extract_role_from_query(query)
     if role:
         direct = get_onet_by_title(_role_title_variants(role))
         if direct:
-            return generate_response(query, direct)
+            return generate_response(query, direct), ["O*NET"]
         # Role intent fallback: keep retrieval occupation-focused (ONET only).
         role_candidates = search_onet(role, top_k=1)
         best_role = _pick_best_role_match(role, role_candidates)
         if best_role:
-            return generate_response(query, best_role)
+            return generate_response(query, best_role), ["O*NET"]
 
     selected_sources, scores, query_embedding = route_query(query)
     if not selected_sources:
-        return "No relevant career information was found for your query."
+        return "No relevant career information was found for your query.", []
     logger.info("Selected sources: %s", selected_sources)
     logger.info("Retrieval scores: %s", {k: round(v, 4) for k, v in scores.items()})
 
@@ -207,6 +208,7 @@ def run_pipeline(query: str) -> str:
     source_handlers = {
         "ESCO": search_esco,
         "ONET": search_onet,
+        "NOC": search_noc,
     }
     for source_name in selected_sources:
         handler = source_handlers.get(source_name)
@@ -254,7 +256,7 @@ def run_pipeline(query: str) -> str:
         "Context chunks passed to generator: %s",
         [f"{r.get('source','')}:{r.get('title','')}" for r in context_results],
     )
-    return generate_response(query, context_results)
+    return generate_response(query, context_results), [s.replace("ONET", "O*NET") for s in selected_sources]
 
 
 if __name__ == "__main__":
@@ -268,5 +270,7 @@ if __name__ == "__main__":
         if question.lower() == "exit":
             break
         print("\nGenerating answer...")
-        answer = run_pipeline(question)
+        answer, sources = run_pipeline(question)
         print(f"\nAnswer: {answer}")
+        if sources:
+            print(f"Sources: {', '.join(sources)}")
