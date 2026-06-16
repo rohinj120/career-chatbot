@@ -20,7 +20,9 @@
       "PowerShell(cd \"c:\\\\Users\\\\rohin jain\\\\Desktop\\\\career_rag_system\"; Start-Process powershell -ArgumentList \"-NoExit\", \"-Command\", \"cd 'c:\\\\Users\\\\rohin jain\\\\Desktop\\\\career_rag_system'; uvicorn api:app --host 127.0.0.1 --port 8000\" -WindowStyle Normal)",
       "PowerShell(Start-Sleep -Seconds 10; try { $r = Invoke-WebRequest -Uri \"http://127.0.0.1:8000/\" -TimeoutSec 10; \"Server running: $\\($r.StatusCode\\)\" } catch { \"Not yet: $\\($_.Exception.Message\\)\" })",
       "Bash(uvicorn api:app --host 127.0.0.1 --port 8000)",
-      "PowerShell(Start-Sleep -Seconds 12; try { $r = Invoke-WebRequest -Uri \"http://127.0.0.1:8000/\" -UseBasicParsing -TimeoutSec 5; \"Server running: $\\($r.StatusCode\\)\" } catch { \"Failed: $\\($_.Exception.Message\\)\" })"
+      "PowerShell(Start-Sleep -Seconds 12; try { $r = Invoke-WebRequest -Uri \"http://127.0.0.1:8000/\" -UseBasicParsing -TimeoutSec 5; \"Server running: $\\($r.StatusCode\\)\" } catch { \"Failed: $\\($_.Exception.Message\\)\" })",
+      "Bash(python -c \"import huggingface_hub; print\\(huggingface_hub.__version__\\)\")",
+      "Bash(python -c \"from huggingface_hub import whoami; info = whoami\\(\\); print\\('Logged in as:', info['name']\\)\")"
     ]
   }
 }
