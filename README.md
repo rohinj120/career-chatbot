@@ -22,15 +22,24 @@ User
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Frontend | React 18 + Vite |
-| Backend API | FastAPI + Uvicorn |
-| Semantic Router | FAISS + Sentence Transformers |
-| LLM | microsoft/Phi-3-mini-4k-instruct (local, offline) |
-| Datasets | O\*NET (US), ESCO (European), NOC (Canada) |
-| Embeddings | Sentence Transformers |
-| Language | Python 3.10+ / Node.js 18+ |
+| Layer | Technology | Version |
+|---|---|---|
+| Frontend | React | 19.2.6 |
+| Frontend | Vite | 8.0.12 |
+| Frontend | socket.io-client | 4.8.3 |
+| Frontend | react-markdown | 10.1.0 |
+| Backend API | FastAPI | 0.136.3 |
+| Backend API | Uvicorn | 0.48.0 |
+| Backend API | python-socketio | 5.12.1 |
+| Semantic Router | FAISS | faiss-cpu 1.14.2 |
+| Embeddings | sentence-transformers | 5.5.1 |
+| LLM Framework | Transformers | 5.9.0 |
+| LLM Framework | Torch | 2.12.0 |
+| LLM Model | microsoft/Phi-3-mini-4k-instruct | local, offline |
+| Datasets | O\*NET (US), ESCO (EU), NOC (Canada) | — |
+| Observability | Langfuse | latest |
+| Language | Python | 3.13 / 3.14 |
+| Language | Node.js | 18+ |
 
 ---
 
@@ -73,7 +82,7 @@ career_rag_system/
 
 ## Prerequisites
 
-- Python 3.10 or higher
+- Python 3.13 or higher
 - Node.js 18 or higher
 - ~8 GB free disk space (for the Phi-3 model)
 - A Hugging Face account (for the one-time model download)
@@ -85,7 +94,7 @@ career_rag_system/
 ### 1. Clone the repository
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/rohinj120/career-chatbot.git
 cd career_rag_system
 ```
 
@@ -111,13 +120,30 @@ python download_phi3.py
 
 This downloads `microsoft/Phi-3-mini-4k-instruct` (~7.64 GB) into `models/Phi-3-mini-4k-instruct/`. Only needs to be done once.
 
-### 5. Configure environment variables
+### 5. Configure backend environment variables
 
-Create a `.env` file in the project root:
+Create a `.env` file in the **project root**:
 
 ```env
+# API server
 API_HOST=127.0.0.1
 API_PORT=8000
+
+# Anthropic (if using Claude instead of local Phi-3)
+ANTHROPIC_API_KEY=your_api_key_here
+
+# Langfuse observability
+LANGFUSE_SECRET_KEY=your_langfuse_secret_key
+LANGFUSE_PUBLIC_KEY=your_langfuse_public_key
+LANGFUSE_HOST=https://cloud.langfuse.com
+```
+
+### 6. Configure frontend environment variables
+
+Create a `.env` file inside **`career-chatbot-frontend/`**:
+
+```env
+VITE_API_URL=http://localhost:8000
 ```
 
 ---
