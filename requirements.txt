@@ -26,3 +26,4 @@ pandas==3.0.3
 scikit-learn==1.8.0
 requests==2.34.2
 tqdm==4.67.3
+mysql-connector-python==9.3.0

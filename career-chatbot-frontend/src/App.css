@@ -131,3 +131,141 @@ button{
   margin-bottom: 4px;
 }
 
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: #f4f6f8;
+}
+
+.login-card {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 380px;
+}
+
+.login-card h1 {
+  margin: 0 0 6px 0;
+  font-size: 1.6rem;
+  color: #1a1a1a;
+  text-align: center;
+}
+
+.login-subtitle {
+  text-align: center;
+  color: #888;
+  margin: 0 0 28px 0;
+  font-size: 0.9rem;
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.login-field label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 6px;
+}
+
+.login-field input {
+  padding: 10px 12px;
+  font-size: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.login-field input:focus {
+  border-color: #0078ff;
+}
+
+.login-error {
+  color: #e53e3e;
+  font-size: 0.85rem;
+  margin: 0 0 14px 0;
+  text-align: center;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  background: #0078ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.login-btn:hover {
+  background: #005ecc;
+}
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.chat-header h1 {
+  margin: 0;
+}
+
+.logout-btn {
+  padding: 8px 16px;
+  background: #f0f0f0;
+  color: #444;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background: #e0e0e0;
+}
+.password-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.password-wrapper:focus-within {
+  border-color: #0078ff;
+}
+
+.password-wrapper input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 10px 12px;
+  font-size: 15px;
+  border-radius: 0;
+}
+
+.toggle-password {
+  background: none;
+  border: none;
+  padding: 0 12px;
+  color: #0078ff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+

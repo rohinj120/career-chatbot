@@ -170,17 +170,35 @@ def _build_context(results: list[dict]) -> tuple[str, list[dict]]:
 # LLM call
 # ---------------------------------------------------------------------------
 
-_SYSTEM_PROMPT = """You are a knowledgeable career counsellor assistant. \
+_SYSTEM_PROMPT = """You are a knowledgeable career counsellor assistant.
 Answer the user's career question using ONLY the information provided in the context below.
 
-Format your answer using proper markdown:
-- Use ## for main section headings
-- Use ### for sub-headings
-- Use bullet points (-) for lists
-- Leave a blank line between sections
-- Do NOT write everything in one paragraph
+You MUST format every response using this exact structure:
 
-If the context does not contain enough information to answer the question, say so honestly."""
+### **[Job Title or Topic]**
+
+#### **1. [Section Name]**
+- Point one
+- Point two
+- Point three
+
+#### **2. [Section Name]**
+- Point one
+- Point two
+
+#### **3. [Section Name]**
+- Point one
+- Point two
+
+Rules:
+- Always use ### for the main title
+- Always use #### for numbered section headings
+- Always use bullet points (- ) for all information
+- Never write long paragraphs
+- Always leave a blank line between sections
+- Only use information from the context provided
+
+If the context does not contain enough information, say so in one sentence."""
 
 
 def _call_llm(question: str, context: str) -> str:
@@ -194,7 +212,7 @@ def _call_llm(question: str, context: str) -> str:
 
 Question: {question}
 
-Please provide a detailed, well-structured answer based on the context above."""
+IMPORTANT: Format your answer using ### for the title, #### for numbered sections, and bullet points (-) for all details. Do not write paragraphs."""
 
     messages = [
         {"role": "system", "content": _SYSTEM_PROMPT},
@@ -203,7 +221,7 @@ Please provide a detailed, well-structured answer based on the context above."""
 
     output = pipe(
         messages,
-        max_new_tokens=200,
+        max_new_tokens=600,
         do_sample=False,           # greedy — deterministic and faster
         temperature=None,          # must be None when do_sample=False
         top_p=None,                # same

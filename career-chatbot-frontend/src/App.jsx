@@ -7,7 +7,65 @@ const socket = io("http://localhost:8000", {
   transports: ["websocket"],
 });
 
+function Login({ onLogin }) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (username.trim() && password.trim()) {
+      onLogin();
+    } else {
+      setError("Please enter a username and password.");
+    }
+  };
+
+  return (
+    <div className="login-container">
+      <div className="login-card">
+        <h1>Career Chatbot</h1>
+        <p className="login-subtitle">Sign in to continue</p>
+        <form onSubmit={handleSubmit}>
+          <div className="login-field">
+            <label>Username</label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter username"
+              autoFocus
+            />
+          </div>
+          <div className="login-field">
+            <label>Password</label>
+            <div className="password-wrapper">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter password"
+              />
+              <button
+                type="button"
+                className="toggle-password"
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
+          </div>
+          {error && <p className="login-error">{error}</p>}
+          <button type="submit" className="login-btn">Login</button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
@@ -83,9 +141,16 @@ function App() {
     socket.emit("send_message", { message: userText });
   };
 
+  if (!isLoggedIn) {
+    return <Login onLogin={() => setIsLoggedIn(true)} />;
+  }
+
   return (
     <div className="container">
-      <h1>Career Chatbot</h1>
+      <div className="chat-header">
+        <h1>Career Chatbot</h1>
+        <button className="logout-btn" onClick={() => setIsLoggedIn(false)}>Logout</button>
+      </div>
 
       {!isConnected && (
         <div className="connection-warning">Connecting to server...</div>
